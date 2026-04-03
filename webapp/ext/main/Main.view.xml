@@ -6,15 +6,15 @@
     xmlns:f="sap.f"
     displayBlock="true">
 
-  <f:DynamicPage id="mainPage" toggleHeaderOnTitleClick="false" headerPinned="true">
+  <f:DynamicPage id="mainPage" toggleHeaderOnTitleClick="false" headerPinned="true" class="filMainPage">
 
-    <!-- ─── Title ─── -->
+    <!-- ─── Title Bar ─── -->
     <f:title>
       <f:DynamicPageTitle>
         <f:heading>
           <HBox alignItems="Center">
-            <core:Icon src="sap-icon://money-bills" size="1.4rem" color="#0070f2" class="filTitleIcon" />
-            <Title text="Expense Limit Request Maintenance" level="H2" class="filTitleText" />
+            <core:Icon src="sap-icon://money-bills" size="1.25rem" color="#0057d2" class="filTitleIcon" />
+            <Title text="FI Expense Limit Maintenance" level="H2" class="filTitleText" />
           </HBox>
         </f:heading>
         <f:actions>
@@ -37,26 +37,26 @@
       </f:DynamicPageTitle>
     </f:title>
 
-    <!-- ─── Pinned Header: Request Context ─── -->
+    <!-- ─── Header: Request Context Cards ─── -->
     <f:header>
       <f:DynamicPageHeader pinnable="false">
         <HBox alignItems="Stretch" wrap="Wrap" class="filHeaderBox">
 
-          <!-- Request Info Card -->
+          <!-- REQUEST Card -->
           <VBox class="filInfoCard">
             <HBox alignItems="Center" class="sapUiTinyMarginBottom">
-              <core:Icon src="sap-icon://document" color="#0070f2" size="0.8rem" class="sapUiSmallMarginEnd" />
+              <core:Icon src="sap-icon://document" color="#0057d2" size="0.8rem" class="filSectionIcon sapUiSmallMarginEnd" />
               <Text text="REQUEST" class="filSectionLabel" />
             </HBox>
             <HBox alignItems="Center" class="sapUiSmallMarginTop">
-              <core:Icon src="sap-icon://key" color="#89919a" size="0.75rem" class="filFieldIcon" />
+              <core:Icon src="sap-icon://key" color="#9ca3af" size="0.75rem" class="filFieldIcon" />
               <VBox class="sapUiTinyMarginBegin">
                 <Text text="Request ID" class="filFieldLabel" />
-                <Text text="{request>/ReqId}" class="filReqIdText" />
+                <Text text="{= ${request>/ReqId} || '—'}" class="filReqIdText" />
               </VBox>
             </HBox>
             <HBox alignItems="Center" class="sapUiTinyMarginTop">
-              <core:Icon src="sap-icon://status-in-process" color="#89919a" size="0.75rem" class="filFieldIcon" />
+              <core:Icon src="sap-icon://status-in-process" color="#9ca3af" size="0.75rem" class="filFieldIcon" />
               <VBox class="sapUiTinyMarginBegin">
                 <Text text="Status" class="filFieldLabel" />
                 <ObjectStatus text="{request>/Status}" state="{request>/StatusState}" inverted="true" />
@@ -64,36 +64,36 @@
             </HBox>
           </VBox>
 
-          <!-- Configuration Card -->
+          <!-- CONFIGURATION Card -->
           <VBox class="filInfoCard">
             <HBox alignItems="Center" class="sapUiTinyMarginBottom">
-              <core:Icon src="sap-icon://settings" color="#0070f2" size="0.8rem" class="sapUiSmallMarginEnd" />
+              <core:Icon src="sap-icon://settings" color="#0057d2" size="0.8rem" class="filSectionIcon sapUiSmallMarginEnd" />
               <Text text="CONFIGURATION" class="filSectionLabel" />
             </HBox>
             <HBox alignItems="Center" class="sapUiSmallMarginTop">
-              <core:Icon src="sap-icon://puzzle" color="#0070f2" size="0.75rem" class="filFieldIcon" />
+              <core:Icon src="sap-icon://puzzle" color="#0057d2" size="0.75rem" class="filFieldIcon" />
               <VBox class="sapUiTinyMarginBegin">
                 <Text text="Module" class="filFieldLabel" />
                 <ObjectStatus text="{requestContext>/ModuleId}" state="Information" inverted="true" />
               </VBox>
             </HBox>
             <HBox alignItems="Center" class="sapUiTinyMarginTop">
-              <core:Icon src="sap-icon://wrench" color="#89919a" size="0.75rem" class="filFieldIcon" />
+              <core:Icon src="sap-icon://wrench" color="#9ca3af" size="0.75rem" class="filFieldIcon" />
               <VBox class="sapUiTinyMarginBegin">
-                <Text text="Configuration Name" class="filFieldLabel" />
+                <Text text="Configuration" class="filFieldLabel" />
                 <Text text="{requestContext>/ConfName}" class="filFieldValue" />
               </VBox>
             </HBox>
           </VBox>
 
-          <!-- Request Details Card: Title + Reason -->
+          <!-- REQUEST DETAILS Card -->
           <VBox class="filInfoCard filInfoCard--wide">
             <HBox alignItems="Center" class="sapUiTinyMarginBottom">
-              <core:Icon src="sap-icon://notes" color="#0070f2" size="0.8rem" class="sapUiSmallMarginEnd" />
+              <core:Icon src="sap-icon://notes" color="#0057d2" size="0.8rem" class="filSectionIcon sapUiSmallMarginEnd" />
               <Text text="REQUEST DETAILS" class="filSectionLabel" />
             </HBox>
             <HBox alignItems="Center" class="sapUiSmallMarginTop">
-              <core:Icon src="sap-icon://text" color="#89919a" size="0.75rem" class="filFieldIcon" />
+              <core:Icon src="sap-icon://text" color="#9ca3af" size="0.75rem" class="filFieldIcon" />
               <VBox class="sapUiTinyMarginBegin" width="100%">
                 <Text text="Title" class="filFieldLabel" />
                 <Input
@@ -104,7 +104,7 @@
               </VBox>
             </HBox>
             <HBox alignItems="Center" class="sapUiTinyMarginTop">
-              <core:Icon src="sap-icon://edit" color="#89919a" size="0.75rem" class="filFieldIcon" />
+              <core:Icon src="sap-icon://edit" color="#9ca3af" size="0.75rem" class="filFieldIcon" />
               <VBox class="sapUiTinyMarginBegin" width="100%">
                 <Text text="Reason for Change" class="filFieldLabel" />
                 <TextArea
@@ -126,16 +126,42 @@
       <VBox class="sapUiMediumMarginBegin sapUiMediumMarginEnd sapUiSmallMarginTop sapUiMediumMarginBottom">
 
         <MessageStrip
-          text="Changes made here are part of a change request and will not take effect until approved."
+          text="Changes made here are part of a change request and will not take effect until approved by a manager."
           type="Information"
           showIcon="true"
-          class="sapUiSmallMarginBottom" />
+          class="sapUiSmallMarginBottom filMessageStrip" />
 
-        <!-- Table Toolbar -->
-        <OverflowToolbar class="sapUiTinyMarginBottom filTableToolbar">
-          <Title text="Expense Limit Lines" level="H4" />
+        <!-- ─── Summary Statistics ─── -->
+        <HBox
+          alignItems="Center"
+          justifyContent="Start"
+          class="sapUiSmallMarginBottom filSummaryStrip"
+          visible="{= ${ui>/requestCreated} }">
+          <VBox class="filStatBox">
+            <Text text="{ui>/totalCount}" class="filStatNumber" />
+            <Text text="Total" class="filStatLabel" />
+          </VBox>
+          <VBox class="filStatBox">
+            <Text text="{ui>/createCount}" class="filStatNumber filStatNumber--create" />
+            <Text text="Create" class="filStatLabel" />
+          </VBox>
+          <VBox class="filStatBox">
+            <Text text="{ui>/updateCount}" class="filStatNumber filStatNumber--update" />
+            <Text text="Update" class="filStatLabel" />
+          </VBox>
+          <VBox class="filStatBox">
+            <Text text="{ui>/deleteCount}" class="filStatNumber filStatNumber--delete" />
+            <Text text="Delete" class="filStatLabel" />
+          </VBox>
+        </HBox>
+
+        <!-- ─── Table Toolbar ─── -->
+        <OverflowToolbar class="filTableToolbar">
+          <Title text="Expense Limit Lines" level="H5" class="filTableTitle" />
+          <Text text="{ui>/rowCountText}" class="filRowCount" visible="{= !!${ui>/rowCountText} }" />
           <ToolbarSpacer />
 
+          <!-- Primary: Create Request -->
           <Button
             text="Create Request"
             type="Emphasized"
@@ -143,24 +169,32 @@
             press=".onCreateRequest"
             visible="{= !${ui>/requestCreated} &amp;&amp; !${ui>/viewOnly} }" />
 
+          <!-- View mode actions -->
           <Button
             text="Edit"
+            type="Transparent"
             icon="sap-icon://edit"
             press=".onEdit"
             visible="{= ${ui>/requestCreated} &amp;&amp; !${ui>/editMode} &amp;&amp; !${ui>/viewOnly} }" />
 
+          <!-- Edit mode: data actions group -->
           <Button
             text="Add Line"
+            type="Ghost"
             icon="sap-icon://add"
             press=".onCreate"
             visible="{= ${ui>/editMode} &amp;&amp; !${ui>/viewOnly} }" />
 
           <Button
             text="Import Excel"
+            type="Ghost"
             icon="sap-icon://upload-to-cloud"
             press=".onImportFromExcel"
             visible="{= ${ui>/editMode} &amp;&amp; !${ui>/viewOnly} }" />
 
+          <ToolbarSeparator visible="{= ${ui>/editMode} &amp;&amp; !${ui>/viewOnly} }" />
+
+          <!-- Edit mode: destructive actions -->
           <Button
             text="Delete"
             icon="sap-icon://delete"
@@ -170,45 +204,49 @@
 
           <Button
             text="Cancel"
+            type="Transparent"
             icon="sap-icon://sys-cancel"
             press=".onCancel"
             visible="{= ${ui>/editMode} &amp;&amp; !${ui>/viewOnly} }" />
 
           <Button
             icon="sap-icon://refresh"
-            tooltip="Refresh"
+            tooltip="Refresh data"
             type="Transparent"
             press=".onRefresh"
             visible="{= !${ui>/editMode} }" />
         </OverflowToolbar>
 
-        <!-- Filter Panel -->
-        <Panel expandable="true" expanded="false" headerText="Filter Limit Lines" class="sapUiTinyMarginBottom">
+        <!-- ─── Filter Panel ─── -->
+        <Panel expandable="true" expanded="false" headerText="Filters" class="sapUiTinyMarginBottom filFilterPanel">
           <VBox class="sapUiSmallMargin">
-            <HBox wrap="Wrap">
-              <VBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+            <HBox wrap="Wrap" class="filFilterGroup">
+              <VBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom filFilterItem">
                 <Label text="Search" />
-                <SearchField id="searchField" width="16rem" search=".onSearch" />
+                <SearchField id="searchField" width="16rem" search=".onSearch" placeholder="Search all columns..." />
               </VBox>
-              <VBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+              <VBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom filFilterItem">
                 <Label text="Environment" />
                 <Input id="envInput" width="9rem" value="{filter>/EnvId}"
+                  placeholder="e.g. DEV"
                   showValueHelp="true" valueHelpRequest=".onValueHelpEnv" />
               </VBox>
-              <VBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+              <VBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom filFilterItem">
                 <Label text="Expense Type" />
                 <Input id="expenseTypeInput" width="10rem" value="{filter>/ExpenseType}"
+                  placeholder="e.g. TRAVEL"
                   showValueHelp="true" valueHelpRequest=".onValueHelpExpenseType" />
               </VBox>
-              <VBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+              <VBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom filFilterItem">
                 <Label text="GL Account" />
-                <Input id="glAccountInput" width="10rem" value="{filter>/GlAccount}" />
+                <Input id="glAccountInput" width="10rem" value="{filter>/GlAccount}"
+                  placeholder="e.g. 6110001" />
               </VBox>
-              <VBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+              <VBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom filFilterItem">
                 <Label text="Currency" />
                 <Select id="currencySelect" width="9rem" selectedKey="{filter>/Currency}">
                   <items>
-                    <core:Item key="" text="All" />
+                    <core:Item key="" text="All Currencies" />
                     <core:Item key="VND" text="VND" />
                     <core:Item key="USD" text="USD" />
                     <core:Item key="EUR" text="EUR" />
@@ -217,29 +255,31 @@
               </VBox>
             </HBox>
             <HBox justifyContent="End">
-              <Button text="Go" type="Emphasized" press=".onSearch" class="sapUiSmallMarginEnd" />
-              <Button text="Clear" press=".onClearFilters" />
+              <Button text="Go" type="Emphasized" press=".onSearch" class="sapUiSmallMarginEnd" icon="sap-icon://search" />
+              <Button text="Clear" press=".onClearFilters" icon="sap-icon://clear-filter" />
             </HBox>
           </VBox>
         </Panel>
 
-        <!-- ─── Limits Table ─── -->
+        <!-- ═══ Limits Table ═══ -->
         <Table
           id="routesTable"
           mode="MultiSelect"
           growing="true"
-          growingThreshold="20"
+          growingThreshold="25"
           growingScrollToLoad="true"
           inset="false"
-          noDataText="No limit lines — click 'Add Line' to add the first entry"
+          fixedLayout="true"
+          noDataText="No expense limit lines found. Click 'Add Line' or 'Import Excel' to get started."
           class="filRoutesTable"
+          updateFinished=".onTableUpdateFinished"
           items="{path: 'tableData>/rows'}">
 
           <columns>
-            <Column width="8rem">
+            <Column width="7rem" hAlign="Center">
               <Text text="Action" />
             </Column>
-            <Column width="7rem">
+            <Column width="5.5rem" hAlign="Center">
               <Text text="Env" />
             </Column>
             <Column width="12rem">
@@ -248,13 +288,13 @@
             <Column width="10rem" minScreenWidth="Tablet" demandPopin="true">
               <Text text="GL Account" />
             </Column>
-            <Column width="10rem" minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+            <Column width="11rem" minScreenWidth="Tablet" demandPopin="true" hAlign="End">
               <Text text="Approval Limit" />
             </Column>
-            <Column width="8rem" minScreenWidth="Tablet" demandPopin="true">
+            <Column width="9rem" minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
               <Text text="Currency" />
             </Column>
-            <Column width="5rem" minScreenWidth="Large" demandPopin="true" hAlign="End">
+            <Column width="4.5rem" minScreenWidth="Large" demandPopin="true" hAlign="Center">
               <Text text="Ver." />
             </Column>
             <Column minScreenWidth="Large" demandPopin="true">
@@ -273,7 +313,7 @@
                   state="{= ${tableData>ActionType} === 'U' ? 'Information' : ${tableData>ActionType} === 'C' ? 'Success' : ${tableData>ActionType} === 'X' ? 'Error' : 'None'}"
                   inverted="true" />
 
-                <!-- Environment (always read-only) -->
+                <!-- Environment (read-only badge) -->
                 <ObjectStatus text="{tableData>EnvId}" state="Information" />
 
                 <!-- Expense Type -->
@@ -296,23 +336,31 @@
                     showValueHelp="true" valueHelpRequest=".onValueHelpGlAccountCell" />
                 </HBox>
 
-                <!-- Approval Limit -->
-                <HBox>
-                  <Text text="{tableData>AutoApprLim}" visible="{= !${ui>/editMode}}" class="filCellText" />
+                <!-- Approval Limit (formatted) -->
+                <HBox justifyContent="End">
+                  <Text
+                    text="{
+                      path: 'tableData>AutoApprLim',
+                      formatter: '.formatAmount'
+                    }"
+                    visible="{= !${ui>/editMode}}"
+                    class="filAmountText" />
                   <Input value="{tableData>AutoApprLim}" visible="{ui>/editMode}" width="100%"
                     type="Number"
                     valueState="{tableData>_vs_AutoApprLim}"
                     valueStateText="Approval Limit is required" />
                 </HBox>
 
-                <!-- Currency -->
-                <HBox>
-                  <Text text="{tableData>Currency}" visible="{= !${ui>/editMode}}" class="filCellText" />
-                  <Select selectedKey="{tableData>Currency}" visible="{ui>/editMode}" width="100%"
+                <!-- Currency (color-coded badge) -->
+                <HBox justifyContent="Center" width="100%">
+                  <Text
+                    text="{tableData>Currency}"
+                    visible="{= !${ui>/editMode}}"
+                    class="{= ${tableData>Currency} === 'VND' ? 'filCurrencyBadge filCurrencyBadge--VND' : ${tableData>Currency} === 'USD' ? 'filCurrencyBadge filCurrencyBadge--USD' : ${tableData>Currency} === 'EUR' ? 'filCurrencyBadge filCurrencyBadge--EUR' : 'filCellText'}" />
+                  <Select selectedKey="{tableData>Currency}" visible="{ui>/editMode}" width="8rem"
                     valueState="{tableData>_vs_Currency}"
                     valueStateText="Currency must be VND, USD, or EUR">
                     <items>
-                      <core:Item key="" text="" />
                       <core:Item key="VND" text="VND" />
                       <core:Item key="USD" text="USD" />
                       <core:Item key="EUR" text="EUR" />
@@ -321,13 +369,14 @@
                 </HBox>
 
                 <!-- Version (always read-only) -->
-                <Text text="{tableData>VersionNo}" class="filVersionBadge" textAlign="End" />
+                <Text text="{tableData>VersionNo}" class="filVersionBadge" textAlign="Center" />
 
                 <!-- Change Note -->
                 <HBox>
-                  <Text text="{tableData>ChangeNote}" visible="{= !${ui>/editMode}}" class="filCellText" />
+                  <Text text="{tableData>ChangeNote}" visible="{= !${ui>/editMode}}" class="filNoteText" />
                   <Input value="{tableData>ChangeNote}" visible="{ui>/editMode}" width="100%"
-                    maxLength="255" />
+                    maxLength="255"
+                    placeholder="Optional note..." />
                 </HBox>
 
               </cells>

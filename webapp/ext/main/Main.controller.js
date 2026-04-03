@@ -52,7 +52,16 @@ sap.ui.define(
           this._aFieldDef  = [];   // loaded from ZCONFFIELDDEF via catalog service
           this.getView().setModel(new JSONModel({ rows: [] }), "tableData");
 
-          const oUIModel = new JSONModel({ editMode: true, requestCreated: false });
+          const oUIModel = new JSONModel({
+            editMode: true,
+            requestCreated: false,
+            viewOnly: false,
+            totalCount: 0,
+            createCount: 0,
+            updateCount: 0,
+            deleteCount: 0,
+            rowCountText: "",
+          });
           this.getView().setModel(oUIModel, "ui");
 
           const oFilterModel = new JSONModel({
@@ -232,7 +241,7 @@ sap.ui.define(
             ExpenseType: "",
             GlAccount:   "",
             AutoApprLim: 0,
-            Currency:    "",
+            Currency:    "VND",
             ChangeNote:  "",
             VersionNo:   0,
             ActionType:  "C",
@@ -1008,10 +1017,11 @@ sap.ui.define(
           }
         },
 
-        /** Apply base filter: hide deleted rows */
+        /** Apply base filter: hide deleted rows + update stats */
         _applyBaseFilter: function () {
           const oBinding = this.byId("routesTable").getBinding("items");
           if (oBinding) oBinding.filter([new Filter("_state", FilterOperator.NE, "deleted")]);
+          this._updateStats();
         },
 
         _fetchRequestHeader: async function (sReqId) {
@@ -1239,6 +1249,42 @@ sap.ui.define(
             this.getView().addDependent(this._oGlAccountCellDialog);
           }
           this._oGlAccountCellDialog.open();
+        },
+
+        /* ─── Formatters ─── */
+
+        formatAmount: function (val) {
+          if (val === null || val === undefined || val === "") return "—";
+          var num = parseFloat(val);
+          if (isNaN(num)) return val;
+          return num.toLocaleString("en-US", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          });
+        },
+
+        /* ─── Statistics & Row Count ─── */
+
+        _updateStats: function () {
+          var oUI = this.getView().getModel("ui");
+          var aRows = this.getView().getModel("tableData").getProperty("/rows") || [];
+          var iCreate = 0, iUpdate = 0, iDelete = 0;
+          aRows.forEach(function (r) {
+            if (r.ActionType === "C") iCreate++;
+            else if (r.ActionType === "U") iUpdate++;
+            else if (r.ActionType === "X") iDelete++;
+          });
+          oUI.setProperty("/totalCount", aRows.length);
+          oUI.setProperty("/createCount", iCreate);
+          oUI.setProperty("/updateCount", iUpdate);
+          oUI.setProperty("/deleteCount", iDelete);
+
+          var iVisible = aRows.filter(function (r) { return r._state !== "deleted"; }).length;
+          oUI.setProperty("/rowCountText", iVisible + " lines");
+        },
+
+        onTableUpdateFinished: function () {
+          this._updateStats();
         },
 
         onNavBack: function () {
