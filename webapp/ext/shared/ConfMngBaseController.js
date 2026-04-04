@@ -163,8 +163,8 @@ sap.ui.define(
 
             const sNewReqId = aResults[0].ReqId;
             oRequestModel.setProperty("/ReqId",       sNewReqId);
-            oRequestModel.setProperty("/Status",      "Draft");
-            oRequestModel.setProperty("/StatusState", "Information");
+            oRequestModel.setProperty("/Status",      "DRAFT");
+            oRequestModel.setProperty("/StatusState", this._statusToState("DRAFT"));
             oView.getModel("ui").setProperty("/requestCreated", true);
             oView.getModel("ui").setProperty("/editMode",       true);
 
@@ -252,7 +252,7 @@ sap.ui.define(
                 }
 
                 oRequestModel.setProperty("/Status",      "SUBMITTED");
-                oRequestModel.setProperty("/StatusState", "Success");
+                oRequestModel.setProperty("/StatusState", this._statusToState("SUBMITTED"));
                 oView.getModel("ui").setProperty("/editMode", false);
 
                 const sConfName =
@@ -471,6 +471,18 @@ sap.ui.define(
             credentials: "include",
             body: JSON.stringify({ ReqTitle: sTitle, Reason: sReason }),
           });
+        },
+
+        /** Map request status string → SAP UI5 ObjectStatus state */
+        _statusToState: function (sStatus) {
+          switch ((sStatus || "").toUpperCase()) {
+            case "DRAFT":     return "Warning";
+            case "SUBMITTED": return "Information";
+            case "APPROVED":  return "Success";
+            case "REJECTED":  return "Error";
+            case "PROMOTED":  return "Success";
+            default:          return "None";
+          }
         },
       }
     );

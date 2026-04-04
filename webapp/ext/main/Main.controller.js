@@ -68,7 +68,7 @@ sap.ui.define(
             ConfId:      oRequestContext.ConfId || "",
             ReqTitle:    "",
             Status:      sStatus,
-            StatusState: bHasReqId ? "Information" : "None",
+            StatusState: this._statusToState(sStatus),
             Reason:      "",
           });
           this.getView().setModel(oRequestModel, "request");
