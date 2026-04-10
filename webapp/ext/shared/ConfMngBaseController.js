@@ -257,7 +257,7 @@ sap.ui.define(
                   reqId: sReqId,
                   reqTitle: sTitle || sReqId,
                   module: this._getModuleId() || "FI",
-                  envId: (oRequestModel.getProperty("/EnvId") || "DEV"),
+                  envId: sEnvId || "DEV",
                   triggeredBy: this._getCurrentUser()
                 });
 
