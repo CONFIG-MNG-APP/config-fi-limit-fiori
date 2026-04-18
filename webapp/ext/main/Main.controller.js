@@ -837,6 +837,24 @@ sap.ui.define(
             }
           }.bind(this));
 
+          // ── Duplicate business key check (ExpenseType + GlAccount) ────────
+          const aSeen = [];
+          aRows.forEach(function (row, iIdx) {
+            if (row._state === "deleted") return;
+            const sExpType = String(row.ExpenseType || "").trim();
+            const sGlAcc   = String(row.GlAccount   || "").trim();
+            if (!sExpType || !sGlAcc) return;
+
+            const sKey = sExpType + "|" + sGlAcc;
+            if (aSeen.indexOf(sKey) >= 0) {
+              row._vs_ExpenseType = "Error";
+              row._vs_GlAccount   = "Error";
+              aErrors.push("Row " + (iIdx + 1) + ": Duplicate entry — ExpenseType '" + sExpType + "' + GL Account '" + sGlAcc + "' already exists in this request.");
+            } else {
+              aSeen.push(sKey);
+            }
+          });
+
           return aErrors;
         },
 
