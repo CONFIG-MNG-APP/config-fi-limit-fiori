@@ -29,7 +29,7 @@ sap.ui.define([], function () {
     parseNumber: function (val) {
       if (typeof val === "number") return val;
       if (!val) return 0;
-      var num = parseFloat(String(val).trim());
+      var num = parseFloat(String(val).trim().replace(/,/g, ""));
       return isNaN(num) ? 0 : num;
     },
 
