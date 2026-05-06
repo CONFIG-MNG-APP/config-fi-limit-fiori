@@ -44,13 +44,53 @@ sap.ui.define(
 
         // ── URL parameter extraction ──────────────────────────────────────
         _getUrlParams: function () {
-          let sQuery = window.location.search || "";
-          if (!sQuery && window.location.hash.indexOf("?") > -1) {
-            sQuery = window.location.hash.substring(
-              window.location.hash.indexOf("?")
-            );
+          // 1. FLP startup parameters — walk up FPM component chain to root app component
+          try {
+            var oComp = this.getOwnerComponent && this.getOwnerComponent();
+            while (oComp) {
+              var oCD = oComp.getComponentData && oComp.getComponentData();
+              if (oCD && oCD.startupParameters) {
+                var oSP  = oCD.startupParameters;
+                var _get = function (k) { return (oSP[k] && oSP[k][0]) || ""; };
+                if (_get("ReqId") || _get("ConfId")) {
+                  var _spDec = function (v) { try { return v ? decodeURIComponent(v) : ""; } catch (e) { return v || ""; }};
+                  return {
+                    ReqId:     _get("ReqId"),
+                    ConfId:    _get("ConfId"),
+                    ConfName:  _spDec(_get("ConfName")),
+                    ModuleId:  _get("ModuleId"),
+                    TargetCds: _get("TargetCds"),
+                    Status:    _get("Status"),
+                    EnvId:     _get("EnvId") || "DEV",
+                    Mode:      _get("Mode") || _get("mode"),
+                  };
+                }
+              }
+              oComp = oComp.getOwnerComponent ? oComp.getOwnerComponent() : null;
+            }
+          } catch (e) { /* not in FLP context */ }
+
+          // 2. URL hash — FLP puts intent params in hash (#SemanticObject-action?key=val)
+          var sHash = window.location.hash;
+          if (sHash.indexOf("?") > -1) {
+            var oHashP = new URLSearchParams(sHash.substring(sHash.indexOf("?")));
+            if (oHashP.get("ConfId") || oHashP.get("ReqId")) {
+              var _dec = function (v) { try { return v ? decodeURIComponent(v) : ""; } catch (e) { return v || ""; }};
+              return {
+                ReqId:     oHashP.get("ReqId")     || "",
+                ConfId:    oHashP.get("ConfId")    || "",
+                ConfName:  _dec(oHashP.get("ConfName")),
+                ModuleId:  oHashP.get("ModuleId")  || "",
+                TargetCds: _dec(oHashP.get("TargetCds")),
+                Status:    oHashP.get("Status")    || "",
+                EnvId:     oHashP.get("EnvId")     || "DEV",
+                Mode:      oHashP.get("Mode") || oHashP.get("mode") || "",
+              };
+            }
           }
-          const oParams = new URLSearchParams(sQuery);
+
+          // 3. Local dev fallback: URL query string
+          const oParams = new URLSearchParams(window.location.search);
           return {
             ReqId:     oParams.get("ReqId")    || "",
             ConfId:    oParams.get("ConfId")   || "",
@@ -337,12 +377,16 @@ sap.ui.define(
 
         // ── Private helpers ──────────────────────────────────────────────
 
-        /** Returns sap-client from URL; defaults to "324". */
+        /** Returns sap-client from URL or FLP startup params; defaults to "324". */
         _getSapClient: function () {
-          return (
-            new URLSearchParams(window.location.search).get("sap-client") ||
-            "324"
-          );
+          try {
+            var oComp = this.getOwnerComponent && this.getOwnerComponent();
+            var oCD   = oComp && oComp.getComponentData && oComp.getComponentData();
+            if (oCD && oCD.startupParameters && oCD.startupParameters["sap-client"]) {
+              return oCD.startupParameters["sap-client"][0] || "324";
+            }
+          } catch (e) { /* ignore */ }
+          return new URLSearchParams(window.location.search).get("sap-client") || "324";
         },
 
         /** GET with X-CSRF-Token: Fetch; returns token string or null. */
